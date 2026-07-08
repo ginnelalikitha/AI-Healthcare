@@ -144,6 +144,12 @@ Return clean markdown.
             datetime.now().strftime("%d-%m-%Y %H:%M")
         }
 
+    def run(self, user_data):
+
+      return {
+        "message":
+        "Track your weight weekly and follow your meal and exercise plans consistently."
+    }
 
 if __name__ == "__main__":
 

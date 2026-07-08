@@ -132,6 +132,9 @@ Return the response in clean markdown.
 
         return response.choices[0].message.content
 
+    def run(self, user_data):
+
+     pass
 
 if __name__ == "__main__":
 

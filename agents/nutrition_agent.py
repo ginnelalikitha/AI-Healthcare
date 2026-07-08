@@ -119,7 +119,9 @@ Respond in clean markdown.
         )
 
         return response.choices[0].message.content
-
+    
+    def run(self, user_data):
+        return self.analyze(user_data)
 
 if __name__ == "__main__":
 

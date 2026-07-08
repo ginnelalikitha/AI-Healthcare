@@ -1,8 +1,8 @@
 import streamlit as st
-from agents.coordinator import Coordinator
+from graph.workflow import graph
 from database.database import HealthDatabase
 
-coordinator = Coordinator()
+
 db = HealthDatabase()
 
 st.set_page_config(
@@ -115,6 +115,10 @@ with col2:
 
 st.divider()
 
+approved = st.checkbox(
+    "I confirm that the above information is correct."
+)
+
 if st.button("Generate AI Health Plan"):
 
     user_data = {
@@ -131,7 +135,18 @@ if st.button("Generate AI Health Plan"):
 
     with st.spinner("Generating your AI Health Plan..."):
 
-        report = coordinator.run(user_data)
+        state = {
+    "user_data": user_data,
+    "calorie": None,
+    "nutrition": None,
+    "meal_plan": None,
+    "exercise": None,
+    "progress": None,
+    "approved": approved,
+    "feedback": None
+}
+
+    report = graph.invoke(state)
 
     st.session_state["user"] = user_data
     st.session_state["report"] = report

@@ -13,6 +13,8 @@ Responsibilities:
 
 from dataclasses import dataclass
 
+from utils import bmi
+
 
 @dataclass
 class HealthMetrics:
@@ -255,7 +257,42 @@ class CalorieAgent:
 
             water_liters=water
         )
+    
+    def run(self, user_data):
 
+         bmi = self.calculate_bmi(
+               user_data["weight"],
+               user_data["height"]
+         )
+
+         category = self.bmi_category(bmi)
+
+         bmr = self.calculate_bmr(
+                user_data["gender"],
+                user_data["weight"],
+                user_data["height"],
+                user_data["age"]
+         )
+
+         target = round(bmr * 1.3)
+
+         protein = round(
+        user_data["weight"] * 1.5
+    )
+
+         water = round(
+        user_data["weight"] * 0.035,
+        2
+    )
+
+         return {
+        "bmi": bmi,
+        "bmi_category": category,
+        "bmr": bmr,
+        "target_calories": target,
+        "protein": protein,
+        "water": water
+    }
 
 # ---------------------------------------
 # Test
