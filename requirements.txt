@@ -8,3 +8,7 @@ reportlab==4.4.2
 sqlalchemy==2.0.41
 bcrypt==4.3.0
 Pillow==11.3.0
+langgraph
+langchain
+langchain-groq
+langchain-core

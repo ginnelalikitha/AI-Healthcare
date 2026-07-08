@@ -1,4 +1,9 @@
 import streamlit as st
+from agents.coordinator import Coordinator
+from database.database import HealthDatabase
+
+coordinator = Coordinator()
+db = HealthDatabase()
 
 st.set_page_config(
     page_title="AI Healthcare Nutrition Coach",
@@ -112,49 +117,38 @@ st.divider()
 
 if st.button("Generate AI Health Plan"):
 
-    st.success("Profile Received")
+    user_data = {
+        "name": name,
+        "age": age,
+        "gender": gender,
+        "height": height,
+        "weight": weight,
+        "activity": activity,
+        "goal": goal,
+        "diet": diet,
+        "disease": ", ".join(disease)
+    }
 
-    progress = st.progress(0)
+    with st.spinner("Generating your AI Health Plan..."):
 
-    st.write("🥗 Nutrition Agent Running...")
-    progress.progress(20)
+        report = coordinator.run(user_data)
 
-    st.write("🔥 Calorie Agent Running...")
-    progress.progress(40)
+    st.session_state["user"] = user_data
+    st.session_state["report"] = report
 
-    st.write("🍽️ Meal Planner Agent Running...")
-    progress.progress(60)
+    st.success("✅ Health Plan Generated!")
 
-    st.write("🏋️ Exercise Agent Running...")
-    progress.progress(80)
+    st.subheader("🔥 Calorie Analysis")
+    st.json(report["calorie"])
 
-    st.write("📈 Progress Agent Running...")
-    progress.progress(100)
+    st.subheader("🥗 Nutrition")
+    st.markdown(report["nutrition"])
 
-    st.success("All Agents Completed!")
+    st.subheader("🍽 Meal Plan")
+    st.markdown(report["meal_plan"])
 
-    st.subheader("Results")
+    st.subheader("🏋 Exercise")
+    st.markdown(report["exercise"])
 
-    st.info(
-        "The next version will display personalized recommendations from each AI agent."
-    )
-
-st.divider()
-
-st.markdown("""
-## AI Agents
-
-🥗 Nutrition Analysis Agent
-
-🔥 Calorie Assessment Agent
-
-🍽️ Meal Planning Agent
-
-🏋️ Exercise Recommendation Agent
-
-📈 Progress Monitoring Agent
-
----
-
-Developed using *Streamlit + Groq API + SQLite*
-""")
+    st.subheader("📈 Progress")
+    st.write(report["progress"])
